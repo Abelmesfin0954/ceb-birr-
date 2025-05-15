@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBE Receipt Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .form-container, .receipt-preview {
+            background-color: white;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: #1A6332;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Form styling */
+        .form-container h2 {
+            background-color: #1A6332;
+            color: white;
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 18px;
+        }
+        
+        .form-content {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #1A6332;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #134d27;
+        }
+        
+        /* Receipt styling */
+        .receipt {
+            width: 100%;
+            max-width: 350px;
+            background-color: white;
+            margin: 0 auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            line-height: 1.4;
+        }
+        
+        .receipt-header {
+            border-radius: 6px;
+            background-color: #99fa59e1;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .receipt-header .status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+        }
+        
+        .receipt-header .icons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .receipt-header .icons i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+   .receipt-content {
+    padding: 20px;
+}
+
+.message {
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: #555; /* Added message content color */
+}
+
+.amount {
+    font-weight: bold;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.account {
+    color: #555;
+}
+
+.transaction-id {
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}  
+        .divider {
+            border-top: 1px solid #e0e0e0;
+            margin: 15px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .divider-text {
+            display: inline-block;
+            padding: 0 10px;
+            background: white;
+            position: relative;
+            top: -10px;
+            color: #777;
+            font-size: 12px;
+        }
+        
+        .view-receipt {
+            padding:20px  15px;
+            border:#9C27B0;
+            text-align: center;
+            color: #1a6332;
+            font-weight: bold;
+            margin: 15px 0;
+            text-decoration: underline;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .bank-info {
+            background-color:rgba(214, 214, 214, 0.87);
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+           
+        }
+        
+        .bank-name {
+            font-weight: bold;
+            color: #1a6332;
+        }
+        
+        .bank-slogan {
+            font-style: italic;
+            color: #666;
+        }
+        
+
+        
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .qr-label {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-buttons button {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .form-container, .receipt-preview {
+                max-width: 100%;
+            }
+        }
+        
+        @media print {
+            .form-container, .action-buttons {
+                display: none;
+            }
+            
+            body {
+                background: none;
+                padding: 0;
+            }
+            
+            .receipt {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Commercial Bank of Ethiopia Receipt Generator</h1>
+    
+    <div class="container">
+        <div class="form-container">
+            <h2>Enter Transaction Details</h2>
+            <div class="form-content">
+                <form id="receiptForm">
+                    <div class="form-group">
+                        <label for="amount">Amount (ETB):</label>
+                        <input type="number" id="amount" step="0.01" required value="2547.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="senderName">Sender Name:</label>
+                        <input type="text" id="senderName" required value="MUSTEFA OSMAN MUSE">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="receiverName">Receiver Name:</label>
+                        <input type="text" id="receiverName" required value="MIHRET ADINEW WORDOFA">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="receiverAccount">Receiver Account:</label>
+                        <input type="text" id="receiverAccount" required value="ETB-7453">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transactionType">Transaction Type:</label>
+                        <input type="text" id="transactionType" required value="ayaanles done via Mobile">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transactionDate">Transaction Date:</label>
+                        <input type="text" id="transactionDate" required value="26-Aug-2024">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transactionId">Transaction ID:</label>
+                        <input type="text" id="transactionId" required value="FT24240NC1WG">
+                    </div>
+                    
+                    <button type="button" onclick="generateReceipt()">Generate Receipt</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="receipt-preview">
+            <h2 style="padding: 15px 20px; background: #f0f0f0; margin: 0;">Receipt Preview</h2>
+            <div class="receipt" id="receiptOutput">
+                <div class="receipt-header">
+                    <div class="status">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Thank you <br> Success</span>
+                    </div>
+                    <div class="icons">
+                        <i class="fas fa-share-alt" title="Share"></i>
+                        <i class="fas fa-download" title="Download"></i>
+                        <i class="fas fa-times" title="Close"></i>
+                    </div>
+                </div>
+                
+                <div class="receipt-content">
+                         <div class="message-header" ><b>Message</b></div>
+                    <div class="message" id="messageContent">
+                        <div><span class="amount" >ETB 2,547.00</span> debited from</div>
+                        <div><span class="name">MUSTEFA OSMAN MUSE</span> for</div>
+                        <div><span class="name">MIHRET ADINEW WORDOFA</span>-</div>
+                        <div><span class="account">ETB-7453</span> (ayaanles done via</div>
+                        <div>Mobile) on 26-Aug-2024 with</div>
+                        <div>transaction ID:</div>
+                        <div><span class="transaction-id">FT24240NC1WG</span>.</div>
+                    </div>
+                    
+                    <div class="qr-container">
+                        <div id="qrcode"></div>
+                 
+                   <a href="">View Receipt</a>
+                    </div>           
+                    <div class="bank-info">
+                        <img src="cbe-logo.png" width="50px"  alt="">
+                        <div class="bank-name">Commercial Bank of Ethiopia</div>
+                        <div class="bank-slogan">The Bank You can always Rely on!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons" style="padding: 20px;">
+                <button onclick="window.print()"><i class="fas fa-print"></i> Print Receipt</button>
+                <button onclick="downloadReceipt()"><i class="fas fa-download"></i> Download</button>
+            </div>
+        </div>
+    </div>
+
+ <script>
+    // DOM Elements
+    const elements = {
+        amount: document.getElementById('amount'),
+        senderName: document.getElementById('senderName'),
+        receiverName: document.getElementById('receiverName'),
+        receiverAccount: document.getElementById('receiverAccount'),
+        transactionType: document.getElementById('transactionType'),
+        transactionDate: document.getElementById('transactionDate'),
+        transactionId: document.getElementById('transactionId'),
+        qrcode: document.getElementById('qrcode'),
+        messageContent: document.getElementById('messageContent'),
+        generateBtn: document.getElementById('generateBtn')
+    };
+
+    // Generate transaction ID (CBE format)
+    const generateTransactionId = () => {
+        return 'FT' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    };
+
+    // Set current date in DD-MMM-YYYY format
+    const setCurrentDate = () => {
+        const date = new Date();
+        return date.toLocaleDateString('en-US', { 
+            day: '2-digit', 
+            month: 'short', 
+            year: 'numeric' 
+        }).replace(/,/g, '');
+    };
+
+    // Generate QR Code with black modules
+    const generateQRCode = () => {
+        elements.qrcode.innerHTML = ''; // Clear previous
+        
+        const qrData = [
+            `CBE Payment Receipt`,
+            `Amount: ETB ${elements.amount.value}`,
+            `From: ${elements.senderName.value}`,
+            `To: ${elements.receiverName.value}`,
+            `Account: ${elements.receiverAccount.value}`,
+            `Date: ${elements.transactionDate.value}`,
+            `ID: ${elements.transactionId.value}`
+        ].join('\n');
+
+        new QRCode(elements.qrcode, {
+            text: qrData,
+            width: 120,  // Larger for better scanning
+            height: 120,
+            colorDark: "#000000", // Pure black
+            colorLight: "#ffffff", // White background
+            correctLevel: QRCode.CorrectLevel.Q // Higher error correction
+        });
+    };
+
+    // Main function
+    const generateReceipt = () => {
+        // Auto-generate missing fields
+        if (!elements.transactionId.value) elements.transactionId.value = generateTransactionId();
+        if (!elements.transactionDate.value) elements.transactionDate.value = setCurrentDate();
+        
+        generateQRCode();
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set default values
+        elements.transactionDate.value = setCurrentDate();
+        elements.transactionId.value = generateTransactionId();
+        
+        // Event listener
+        elements.generateBtn?.addEventListener('click', generateReceipt);
+    });
+
+    // Make functions available globally (for button clicks)
+    window.generateReceipt = generateReceipt;
+</script>
+</body>
+</html>
