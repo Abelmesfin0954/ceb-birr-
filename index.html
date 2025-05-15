@@ -7,14 +7,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <style>
+        :root {
+            --cbe-green: #1A6332;
+            --cbe-light-green: #99fa59e1;
+            --text-dark: #333;
+            --text-medium: #555;
+            --text-light: #777;
+            --border-color: #e0e0e0;
+            --bg-light: #f5f5f5;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: var(--bg-light);
             display: flex;
             flex-direction: column;
             align-items: center;
+            color: var(--text-dark);
+        }
+        
+        h1 {
+            color: var(--cbe-green);
+            text-align: center;
+            margin-bottom: 30px;
         }
         
         .container {
@@ -28,7 +45,6 @@
         
         .form-container, .receipt-preview {
             background-color: white;
-            padding: 0;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             width: 100%;
@@ -36,15 +52,9 @@
             overflow: hidden;
         }
         
-        h1 {
-            color: #1A6332;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        /* Form styling */
+        /* Form Styling */
         .form-container h2 {
-            background-color: #1A6332;
+            background-color: var(--cbe-green);
             color: white;
             padding: 15px 20px;
             margin: 0;
@@ -63,33 +73,34 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #555;
+            color: var(--text-medium);
         }
         
         input, select {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 16px;
+            box-sizing: border-box;
         }
         
         button {
-            background-color: #1A6332;
+            background-color: var(--cbe-green);
             color: white;
             border: none;
             padding: 12px 20px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 10px;
+            transition: background-color 0.3s;
         }
         
         button:hover {
             background-color: #134d27;
         }
         
-        /* Receipt styling */
+        /* Receipt Styling */
         .receipt {
             width: 100%;
             max-width: 350px;
@@ -97,11 +108,11 @@
             margin: 0 auto;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             line-height: 1.4;
+            font-size: 15px;
         }
         
         .receipt-header {
-            border-radius: 6px;
-            background-color: #99fa59e1;
+            background-color: var(--cbe-light-green);
             color: white;
             padding: 15px;
             display: flex;
@@ -124,84 +135,46 @@
         .receipt-header .icons i {
             cursor: pointer;
             font-size: 18px;
-        }
-   .receipt-content {
-    padding: 20px;
-}
-
-.message {
-    margin-bottom: 15px;
-    font-size: 15px;
-    color: #555; /* Added message content color */
-}
-
-.amount {
-    font-weight: bold;
-}
-
-.name {
-    font-weight: bold;
-}
-
-.account {
-    color: #555;
-}
-
-.transaction-id {
-    font-family: monospace;
-    letter-spacing: 0.5px;
-}  
-        .divider {
-            border-top: 1px solid #e0e0e0;
-            margin: 15px 0;
-            text-align: center;
-            position: relative;
+            transition: opacity 0.3s;
         }
         
-        .divider-text {
-            display: inline-block;
-            padding: 0 10px;
-            background: white;
-            position: relative;
-            top: -10px;
-            color: #777;
-            font-size: 12px;
+        .receipt-header .icons i:hover {
+            opacity: 0.8;
         }
         
-        .view-receipt {
-            padding:20px  15px;
-            border:#9C27B0;
-            text-align: center;
-            color: #1a6332;
+        .receipt-content {
+            padding: 20px;
+        }
+        
+        .message-header {
             font-weight: bold;
-            margin: 15px 0;
-            text-decoration: underline;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
+            margin-bottom: 10px;
+            color: var(--text-dark);
         }
         
-        .bank-info {
-            background-color:rgba(214, 214, 214, 0.87);
-            text-align: center;
-            margin-top: 20px;
-            font-size: 13px;
-           
+        .message {
+            margin-bottom: 15px;
+            color: var(--text-medium);
         }
         
-        .bank-name {
+        .amount {
             font-weight: bold;
-            color: #1a6332;
+            color: var(--text-dark);
         }
         
-        .bank-slogan {
-            font-style: italic;
-            color: #666;
+        .name {
+            font-weight: bold;
         }
         
-
+        .account {
+            color: var(--text-medium);
+        }
+        
+        .transaction-id {
+            font-family: monospace;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+        }
         
         .qr-container {
             display: flex;
@@ -210,20 +183,57 @@
             margin: 20px 0;
         }
         
-        .qr-label {
-            font-size: 12px;
-            color: #777;
+        .view-receipt {
+            color: var(--cbe-green);
+            font-weight: bold;
+            margin: 15px 0;
+            text-decoration: underline;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+        
+        .view-receipt:hover {
+            color: #134d27;
+        }
+        
+        .bank-info {
+            background-color: rgba(214, 214, 214, 0.87);
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        
+        .bank-name {
+            font-weight: bold;
+            color: var(--cbe-green);
+            margin-top: 10px;
+        }
+        
+        .bank-slogan {
+            font-style: italic;
+            color: var(--text-medium);
             margin-top: 5px;
+            font-size: 14px;
         }
         
         .action-buttons {
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            padding: 0 20px 20px;
         }
         
         .action-buttons button {
             flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         @media (max-width: 768px) {
@@ -249,6 +259,11 @@
             .receipt {
                 box-shadow: none;
                 max-width: 100%;
+            }
+            
+            .receipt-header {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
@@ -288,15 +303,17 @@
                     
                     <div class="form-group">
                         <label for="transactionDate">Transaction Date:</label>
-                        <input type="text" id="transactionDate" required value="26-Aug-2024">
+                        <input type="text" id="transactionDate" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="transactionId">Transaction ID:</label>
-                        <input type="text" id="transactionId" required value="FT24240NC1WG">
+                        <input type="text" id="transactionId" required>
                     </div>
                     
-                    <button type="button" onclick="generateReceipt()">Generate Receipt</button>
+                    <button type="button" id="generateBtn">
+                        <i class="fas fa-sync-alt"></i> Generate Receipt
+                    </button>
                 </form>
             </div>
         </div>
@@ -317,112 +334,174 @@
                 </div>
                 
                 <div class="receipt-content">
-                         <div class="message-header" ><b>Message</b></div>
+                    <div class="message-header"><b>Message</b></div>
                     <div class="message" id="messageContent">
-                        <div><span class="amount" >ETB 2,547.00</span> debited from</div>
-                        <div><span class="name">MUSTEFA OSMAN MUSE</span> for</div>
-                        <div><span class="name">MIHRET ADINEW WORDOFA</span>-</div>
-                        <div><span class="account">ETB-7453</span> (ayaanles done via</div>
-                        <div>Mobile) on 26-Aug-2024 with</div>
-                        <div>transaction ID:</div>
-                        <div><span class="transaction-id">FT24240NC1WG</span>.</div>
+                        <!-- Content will be generated by JavaScript -->
                     </div>
                     
                     <div class="qr-container">
                         <div id="qrcode"></div>
-                 
-                   <a href="">View Receipt</a>
-                    </div>           
+                        <a class="view-receipt" href="#">
+                            <i class="fas fa-receipt"></i> View Receipt
+                        </a>
+                    </div>
+                    
                     <div class="bank-info">
-                        <img src="cbe-logo.png" width="50px"  alt="">
+                        <img src="cbe-logo.png" width="50px" alt="CBE Logo">
                         <div class="bank-name">Commercial Bank of Ethiopia</div>
                         <div class="bank-slogan">The Bank You can always Rely on!</div>
                     </div>
                 </div>
             </div>
             
-            <div class="action-buttons" style="padding: 20px;">
-                <button onclick="window.print()"><i class="fas fa-print"></i> Print Receipt</button>
-                <button onclick="downloadReceipt()"><i class="fas fa-download"></i> Download</button>
+            <div class="action-buttons">
+                <button onclick="window.print()">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button onclick="downloadReceipt()">
+                    <i class="fas fa-download"></i> Download
+                </button>
             </div>
         </div>
     </div>
 
- <script>
-    // DOM Elements
-    const elements = {
-        amount: document.getElementById('amount'),
-        senderName: document.getElementById('senderName'),
-        receiverName: document.getElementById('receiverName'),
-        receiverAccount: document.getElementById('receiverAccount'),
-        transactionType: document.getElementById('transactionType'),
-        transactionDate: document.getElementById('transactionDate'),
-        transactionId: document.getElementById('transactionId'),
-        qrcode: document.getElementById('qrcode'),
-        messageContent: document.getElementById('messageContent'),
-        generateBtn: document.getElementById('generateBtn')
-    };
+    <script>
+        // DOM Elements
+        const elements = {
+            amount: document.getElementById('amount'),
+            senderName: document.getElementById('senderName'),
+            receiverName: document.getElementById('receiverName'),
+            receiverAccount: document.getElementById('receiverAccount'),
+            transactionType: document.getElementById('transactionType'),
+            transactionDate: document.getElementById('transactionDate'),
+            transactionId: document.getElementById('transactionId'),
+            qrcode: document.getElementById('qrcode'),
+            messageContent: document.getElementById('messageContent'),
+            generateBtn: document.getElementById('generateBtn')
+        };
 
-    // Generate transaction ID (CBE format)
-    const generateTransactionId = () => {
-        return 'FT' + Math.random().toString(36).substring(2, 10).toUpperCase();
-    };
+        // Format currency with commas
+        const formatCurrency = (amount) => {
+            return parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        };
 
-    // Set current date in DD-MMM-YYYY format
-    const setCurrentDate = () => {
-        const date = new Date();
-        return date.toLocaleDateString('en-US', { 
-            day: '2-digit', 
-            month: 'short', 
-            year: 'numeric' 
-        }).replace(/,/g, '');
-    };
+        // Generate transaction ID (CBE format: FT + 8 alphanumeric chars)
+        const generateTransactionId = () => {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let result = 'FT';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        };
 
-    // Generate QR Code with black modules
-    const generateQRCode = () => {
-        elements.qrcode.innerHTML = ''; // Clear previous
-        
-        const qrData = [
-            `CBE Payment Receipt`,
-            `Amount: ETB ${elements.amount.value}`,
-            `From: ${elements.senderName.value}`,
-            `To: ${elements.receiverName.value}`,
-            `Account: ${elements.receiverAccount.value}`,
-            `Date: ${elements.transactionDate.value}`,
-            `ID: ${elements.transactionId.value}`
-        ].join('\n');
+        // Set current date in DD-MMM-YYYY format (e.g., 26-Aug-2024)
+        const setCurrentDate = () => {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date = new Date();
+            return `${date.getDate()}-${months[date.getMonth()]}-${date.getFullYear()}`;
+        };
 
-        new QRCode(elements.qrcode, {
-            text: qrData,
-            width: 120,  // Larger for better scanning
-            height: 120,
-            colorDark: "#000000", // Pure black
-            colorLight: "#ffffff", // White background
-            correctLevel: QRCode.CorrectLevel.Q // Higher error correction
-        });
-    };
+        // Generate receipt content HTML
+        const generateReceiptContent = () => {
+            const formattedAmount = formatCurrency(elements.amount.value);
+            
+            return `
+                <div><span class="amount">ETB ${formattedAmount}</span> debited from</div>
+                <div><span class="name">${elements.senderName.value}</span> for</div>
+                <div><span class="name">${elements.receiverName.value}</span>-</div>
+                <div><span class="account">${elements.receiverAccount.value}</span> (${elements.transactionType.value}</div>
+                <div>Mobile) on ${elements.transactionDate.value} with</div>
+                <div>transaction ID:</div>
+                <div><span class="transaction-id">${elements.transactionId.value}</span>.</div>
+            `;
+        };
 
-    // Main function
-    const generateReceipt = () => {
-        // Auto-generate missing fields
-        if (!elements.transactionId.value) elements.transactionId.value = generateTransactionId();
-        if (!elements.transactionDate.value) elements.transactionDate.value = setCurrentDate();
-        
-        generateQRCode();
-    };
+        // Generate QR Code
+        const generateQRCode = () => {
+            elements.qrcode.innerHTML = '';
+            
+            const qrData = [
+                `CBE Transaction Receipt`,
+                `Amount: ETB ${elements.amount.value}`,
+                `From: ${elements.senderName.value}`,
+                `To: ${elements.receiverName.value}`,
+                `Account: ${elements.receiverAccount.value}`,
+                `Type: ${elements.transactionType.value}`,
+                `Date: ${elements.transactionDate.value}`,
+                `Transaction ID: ${elements.transactionId.value}`
+            ].join('\n');
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-        // Set default values
-        elements.transactionDate.value = setCurrentDate();
-        elements.transactionId.value = generateTransactionId();
-        
-        // Event listener
-        elements.generateBtn?.addEventListener('click', generateReceipt);
-    });
+            new QRCode(elements.qrcode, {
+                text: qrData,
+                width: 160,
+                height: 160,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        };
 
-    // Make functions available globally (for button clicks)
-    window.generateReceipt = generateReceipt;
-</script>
+        // Generate complete receipt
+        const generateReceipt = () => {
+            try {
+                // Validate required fields
+                if (!elements.amount.value || !elements.senderName.value || 
+                    !elements.receiverName.value || !elements.receiverAccount.value) {
+                    throw new Error("Please fill in all required fields");
+                }
+
+                // Auto-generate missing fields
+                if (!elements.transactionId.value) {
+                    elements.transactionId.value = generateTransactionId();
+                }
+                if (!elements.transactionDate.value) {
+                    elements.transactionDate.value = setCurrentDate();
+                }
+                
+                // Update receipt content
+                elements.messageContent.innerHTML = generateReceiptContent();
+                generateQRCode();
+                
+            } catch (error) {
+                console.error("Error generating receipt:", error);
+                alert(error.message);
+            }
+        };
+
+        // Download receipt as image (placeholder)
+        const downloadReceipt = () => {
+            alert("Download functionality would be implemented here");
+            // In a real implementation, this would use html2canvas or similar library
+            // to convert the receipt to an image and trigger a download
+        };
+
+        // Initialize the application
+        const init = () => {
+            // Set default values
+            elements.transactionDate.value = setCurrentDate();
+            elements.transactionId.value = generateTransactionId();
+            
+            // Generate initial receipt
+            generateReceipt();
+            
+            // Event listeners
+            elements.generateBtn.addEventListener('click', generateReceipt);
+            
+            document.querySelector('.fa-share-alt').addEventListener('click', () => {
+                alert("Share functionality would be implemented here");
+            });
+            
+            document.querySelector('.fa-download').addEventListener('click', downloadReceipt);
+            
+            document.querySelector('.fa-times').addEventListener('click', () => {
+                alert("Close functionality would be implemented here");
+            });
+        };
+
+        // Run when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
